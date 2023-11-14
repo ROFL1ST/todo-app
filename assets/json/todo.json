@@ -1,0 +1,43 @@
+{
+    "status": "Success",
+    "data": [
+        {
+            "_id": "65522b5b560a518fd655e805",
+            "id_user": "655228f4c7677e6979fcc259",
+            "name": "Kontil",
+            "percent": "0",
+            "description": "P",
+            "createdAt": "2023-11-13T13:57:47.690Z",
+            "updatedAt": "2023-11-13T13:57:47.690Z",
+            "__v": 0,
+            "todolists": [
+                {
+                    "_id": "65523e01e7fa0b1022be5cae",
+                    "id_todo": "65522b5b560a518fd655e805",
+                    "id_user": "655228f4c7677e6979fcc259",
+                    "name": "halo 2.2",
+                    "status": "open",
+                    "priority": "low",
+                    "start": "2023-10-26T06:28:14.805Z",
+                    "end": "2023-10-30T13:08:19.947Z",
+                    "createdAt": "2023-11-13T15:17:21.275Z",
+                    "updatedAt": "2023-11-13T15:17:21.275Z",
+                    "__v": 0
+                }
+            ],
+            "user": {
+                "_id": "65522b5b560a518fd655e807",
+                "id_todo": "65522b5b560a518fd655e805",
+                "id_user": "655228f4c7677e6979fcc259",
+                "role": "owner",
+                "__v": 0,
+                "username": "rofl1st",
+                "email": "danendrapr55@gmail.com",
+                "name": "Danen",
+                "isVerified": true,
+                "photo_profile": null,
+                "status": "offline"
+            }
+        }
+    ]
+}

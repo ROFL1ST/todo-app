@@ -24,9 +24,10 @@ class SplashscreenView extends GetView<SplashscreenController> {
               child: Center(
                 child: Column(
                   children: [
+                    SizedBox(),
                     Image.asset(
                       "assets/icons/icon.png",
-                      width: Get.width / 3,
+                      width: Get.width / 2.5,
                     ),
                     Text(
                       'Let’s be productive',

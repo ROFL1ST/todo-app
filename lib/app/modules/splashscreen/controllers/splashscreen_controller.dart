@@ -8,6 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:todo_app/app/controller/global_controller.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:todo_app/app/modules/loginPage/views/loginPage_view.dart';
+import 'package:todo_app/app/modules/starter/views/starter_view.dart';
 
 class SplashscreenController extends GetxController {
   //TODO: Implement SplashscreenController
@@ -27,6 +28,7 @@ class SplashscreenController extends GetxController {
       global.isOnline(true);
       update();
     }
+    checkFirstTime();
     checkToken();
   }
 
@@ -39,6 +41,20 @@ class SplashscreenController extends GetxController {
   @override
   void onClose() {
     super.onClose();
+  }
+
+  void checkFirstTime() async {
+    prefs = await SharedPreferences.getInstance();
+    bool firstTime = prefs.getBool('firstTime') ?? true;
+
+    Timer(Duration(seconds: 3), () {
+      if (firstTime) {
+        
+        Get.off(() => StarterView(), transition: Transition.fade);
+      } else {
+        checkToken();
+      }
+    });
   }
 
   checkToken() async {
