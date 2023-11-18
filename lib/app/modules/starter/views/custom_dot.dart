@@ -14,16 +14,17 @@ class CustomDotIndicator extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: List.generate(itemCount, (index) {
-        return Container(
-          width: 8.0,
-          height: 8.0,
-          margin: EdgeInsets.symmetric(horizontal: 4.0),
+        return AnimatedContainer(
+          duration: Duration(milliseconds: 150),
+          margin: EdgeInsets.all(5),
+          height: 10,
+          width:  40,
           decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            color: currentIndex == index ? Colors.blue : Colors.grey,
+            color: index == currentIndex ? Color(0xFFD9D9D9) : Color(0xFFD9D9D9).withOpacity(0.5),
+            borderRadius: BorderRadius.circular(5),
           ),
         );
-      }),
+      }).expand((widget) => [widget, SizedBox(width: 10.0)]).toList(),
     );
   }
 }

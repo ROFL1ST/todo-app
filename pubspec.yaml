@@ -16,6 +16,7 @@ dependencies:
   jwt_decoder: 2.0.1
   cached_network_image: 3.3.0
   carousel_slider: 4.2.1
+  lottie: 2.7.0
   flutter: 
     sdk: flutter
 
@@ -30,4 +31,16 @@ flutter:
     - assets/icons/
     - assets/json/
   uses-material-design: true
+  fonts:
+    - family: Popin
+      fonts:
+        - asset: fonts/Poppins-Regular.ttf
+
+    - family: PopinMedium
+      fonts:
+        - asset: fonts/Poppins-Medium.ttf
+
+    - family: PopinSemi
+      fonts:
+        - asset: fonts/Poppins-SemiBold.ttf
 
