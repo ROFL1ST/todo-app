@@ -18,6 +18,9 @@ dependencies:
   carousel_slider: 4.2.1
   lottie: 2.7.0
   iconsax: 0.0.8
+  socket_io_client: 2.0.3+1
+  jwt_decode: 0.3.1
+  simple_circular_progress_bar: 1.0.2
   flutter: 
     sdk: flutter
 

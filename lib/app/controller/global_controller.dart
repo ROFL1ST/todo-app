@@ -7,7 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class GlobalController extends GetxController {
   // var profile = Get.put(ProfileController());
-  final url = 'http://localhost:9000/api';
+  final url = 'https://todo-mongo-api-production.up.railway.app';
   final fontHeading = 27.0.obs;
   final fontSize = 18.0.obs;
   final fontSet = 13.0.obs;

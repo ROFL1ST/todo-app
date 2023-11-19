@@ -7,6 +7,8 @@ import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:todo_app/app/controller/global_controller.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
+import 'package:todo_app/app/data/services/socket.dart';
+import 'package:todo_app/app/modules/home/views/home_view.dart';
 import 'package:todo_app/app/modules/loginPage/views/loginPage_view.dart';
 import 'package:todo_app/app/modules/register/views/register_view.dart';
 import 'package:todo_app/app/modules/starter/views/starter_view.dart';
@@ -16,7 +18,8 @@ class SplashscreenController extends GetxController {
   final global = Get.put(GlobalController());
   // final profileController = Get.put(ProfileController());
   late SharedPreferences prefs;
-
+  final WebSocketController webSocketController =
+      Get.put(WebSocketController());
   var opacity = 0.0.obs;
   @override
   void onInit() async {
@@ -50,7 +53,6 @@ class SplashscreenController extends GetxController {
 
     Timer(Duration(seconds: 3), () {
       if (firstTime) {
-        
         Get.off(() => StarterView(), transition: Transition.fade);
       } else {
         checkToken();
@@ -66,9 +68,7 @@ class SplashscreenController extends GetxController {
         if (token != null) {
           final isTokenExpired = JwtDecoder.isExpired(token);
           if (!isTokenExpired) {
-            // Get.off(() => BottomBarView(),
-            //     duration: Duration(milliseconds: 1000),
-            //     transition: Transition.fade);
+            Get.offNamed("/home");
           } else {
             Get.dialog(
               barrierDismissible: false,

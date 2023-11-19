@@ -115,6 +115,7 @@ class RegisterView extends GetView<RegisterController> {
                     FieldController(
                       child: TextField(
                         controller: controller.password,
+                        obscureText: true,
                         decoration: InputDecoration(
                           icon: Container(
                             decoration: BoxDecoration(
@@ -134,21 +135,41 @@ class RegisterView extends GetView<RegisterController> {
                     SizedBox(
                       height: Get.height * 0.02,
                     ),
-                    ElevatedButton(
-                      onPressed: () {},
-                      child: Text("Sign Up"),
-                      style: ButtonStyle(
-                        shape: MaterialStateProperty.all(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
+                    Obx(
+                      () => ElevatedButton(
+                        onPressed: () {
+                          if (!controller.isLoading.value) {
+                            if (controller.email.value.text.length < 1 &&
+                                controller.username.value.text.length < 1 &&
+                                controller.name.value.text.length < 1 &&
+                                controller.password.value.text.length < 1) {
+                              Get.snackbar(
+                                "Please fill in the blank",
+                                "Please fill every form",
+                                backgroundColor: Colors.black38,
+                                duration: const Duration(milliseconds: 1300),
+                                snackPosition: SnackPosition.BOTTOM,
+                              );
+                            } else {
+                              controller.register();
+                            }
+                          }
+                        },
+                        child: Text(
+                            controller.isLoading.value ? "Loading" : "Sign Up"),
+                        style: ButtonStyle(
+                          shape: MaterialStateProperty.all(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
                           ),
+                          overlayColor: MaterialStateProperty.all(kButtonColor),
+                          fixedSize: MaterialStateProperty.all(
+                            Size(310, 50),
+                          ),
+                          backgroundColor:
+                              MaterialStateProperty.all(kButtonColor),
                         ),
-                        overlayColor: MaterialStateProperty.all(kButtonColor),
-                        fixedSize: MaterialStateProperty.all(
-                          Size(310, 50),
-                        ),
-                        backgroundColor:
-                            MaterialStateProperty.all(kButtonColor),
                       ),
                     ),
                     SizedBox(
