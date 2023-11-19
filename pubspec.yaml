@@ -17,6 +17,7 @@ dependencies:
   cached_network_image: 3.3.0
   carousel_slider: 4.2.1
   lottie: 2.7.0
+  iconsax: 0.0.8
   flutter: 
     sdk: flutter
 
@@ -30,17 +31,15 @@ flutter:
     - assets/images/
     - assets/icons/
     - assets/json/
-  uses-material-design: true
-  fonts:
+  fonts: 
     - family: Popin
-      fonts:
+      fonts: 
         - asset: fonts/Poppins-Regular.ttf
-
     - family: PopinMedium
-      fonts:
+      fonts: 
         - asset: fonts/Poppins-Medium.ttf
-
     - family: PopinSemi
-      fonts:
+      fonts: 
         - asset: fonts/Poppins-SemiBold.ttf
+  uses-material-design: true
 

@@ -38,7 +38,6 @@ class StarterView extends GetView<StarterController> {
                   viewportFraction: 0.92,
                   onPageChanged: (index, reason) {
                     controller.updateCurrentPage(index);
-                    print(controller.currentIndex.value);
                   },
                 ),
               ),
@@ -57,8 +56,10 @@ class StarterView extends GetView<StarterController> {
               ElevatedButton(
                 onPressed: () {
                   if (controller.currentIndex.value != 2) {
-                    _carouselController
-                        .animateToPage(controller.currentIndex.value + 1);
+                    _carouselController.animateToPage(
+                      controller.currentIndex.value + 1,
+                      curve: Curves.easeInOut,
+                    );
                   } else {
                     controller.goToLogin();
                   }

@@ -1,4 +1,8 @@
 import 'package:get/get.dart';
+import 'package:todo_app/app/modules/loginPage/bindings/loginPage_binding.dart';
+import 'package:todo_app/app/modules/loginPage/views/loginPage_view.dart';
+import 'package:todo_app/app/modules/register/bindings/register_binding.dart';
+import 'package:todo_app/app/modules/register/views/register_view.dart';
 
 import '../modules/home/bindings/home_binding.dart';
 import '../modules/home/views/home_view.dart';
@@ -26,8 +30,18 @@ class AppPages {
       binding: SplashscreenBinding(),
     ),
     GetPage(
+      name: _Paths.LOGINSCREEN,
+      page: () => LoginPageView(),
+      binding: LoginPageBinding(),
+    ),
+    GetPage(
+      name: _Paths.REGISTERSCREEN,
+      page: () => RegisterView(),
+      binding: RegisterBinding(),
+    ),
+    GetPage(
       name: _Paths.STARTER,
-      page: () =>  StarterView(),
+      page: () => StarterView(),
       binding: StarterBinding(),
     ),
   ];

@@ -47,6 +47,6 @@ class StarterController extends GetxController {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     print("Going To Login");
     prefs.setBool('firstTime', false);
-    Get.offAll(() => LoginPageView());
+    Get.offAllNamed("/register-screen");
   }
 }

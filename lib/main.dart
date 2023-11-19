@@ -11,6 +11,10 @@ void main() {
       title: "Application",
       initialRoute: AppPages.INITIAL,
       getPages: AppPages.routes,
+      theme: ThemeData(
+        androidOverscrollIndicator: AndroidOverscrollIndicator.stretch,
+        colorScheme: ThemeData.dark().colorScheme,
+      ),
     ),
   );
 }

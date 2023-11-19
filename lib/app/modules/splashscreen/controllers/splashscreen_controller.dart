@@ -8,6 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:todo_app/app/controller/global_controller.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:todo_app/app/modules/loginPage/views/loginPage_view.dart';
+import 'package:todo_app/app/modules/register/views/register_view.dart';
 import 'package:todo_app/app/modules/starter/views/starter_view.dart';
 
 class SplashscreenController extends GetxController {
@@ -94,7 +95,7 @@ class SplashscreenController extends GetxController {
           }
         } else {
           Get.offAll(
-            () => LoginPageView(),
+            () => RegisterView(),
           );
         }
       });

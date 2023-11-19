@@ -17,29 +17,31 @@ class SplashscreenView extends GetView<SplashscreenController> {
       body: Container(
         padding: EdgeInsets.only(top: Get.width / 2),
         color: kBackgroundColor,
-        child: Obx(() => AnimatedOpacity(
-              curve: Curves.easeInBack,
-              duration: Duration(milliseconds: 2500),
-              opacity: controller.opacity.value,
-              child: Center(
-                child: Column(
-                  children: [
-                    SizedBox(),
-                    Image.asset(
-                      "assets/icons/icon.png",
-                      width: Get.width / 2.5,
-                    ),
-                    Text(
-                      'Let’s be productive',
-                      style: TextStyle(
-                          fontSize: Get.width / 20,
-                          fontFamily: 'Prompt',
-                          color: Colors.grey),
-                    )
-                  ],
-                ),
+        child: Obx(
+          () => AnimatedOpacity(
+            curve: Curves.easeInBack,
+            duration: Duration(milliseconds: 2500),
+            opacity: controller.opacity.value,
+            child: Center(
+              child: Column(
+                children: [
+                  SizedBox(),
+                  Image.asset(
+                    "assets/icons/icon.png",
+                    width: Get.width / 2.5,
+                  ),
+                  Text(
+                    'Let’s be productive',
+                    style: TextStyle(
+                        fontSize: Get.width / 20,
+                        fontFamily: 'Prompt',
+                        color: Colors.grey),
+                  )
+                ],
               ),
-            )),
+            ),
+          ),
+        ),
       ),
     );
   }
