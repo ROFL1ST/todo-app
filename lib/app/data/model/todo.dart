@@ -38,8 +38,8 @@ class Datum {
     DateTime createdAt;
     DateTime updatedAt;
     int v;
-    List<Todolist> todolists;
-    User user;
+    List<dynamic> todolists;
+    List<User> user;
 
     Datum({
         required this.id,
@@ -63,8 +63,8 @@ class Datum {
         createdAt: DateTime.parse(json["createdAt"]),
         updatedAt: DateTime.parse(json["updatedAt"]),
         v: json["__v"],
-        todolists: List<Todolist>.from(json["todolists"].map((x) => Todolist.fromJson(x))),
-        user: User.fromJson(json["user"]),
+        todolists: List<dynamic>.from(json["todolists"].map((x) => x)),
+        user: List<User>.from(json["user"].map((x) => User.fromJson(x))),
     );
 
     Map<String, dynamic> toJson() => {
@@ -76,64 +76,8 @@ class Datum {
         "createdAt": createdAt.toIso8601String(),
         "updatedAt": updatedAt.toIso8601String(),
         "__v": v,
-        "todolists": List<dynamic>.from(todolists.map((x) => x.toJson())),
-        "user": user.toJson(),
-    };
-}
-
-class Todolist {
-    String id;
-    String idTodo;
-    String idUser;
-    String name;
-    String status;
-    String priority;
-    DateTime start;
-    DateTime end;
-    DateTime createdAt;
-    DateTime updatedAt;
-    int v;
-
-    Todolist({
-        required this.id,
-        required this.idTodo,
-        required this.idUser,
-        required this.name,
-        required this.status,
-        required this.priority,
-        required this.start,
-        required this.end,
-        required this.createdAt,
-        required this.updatedAt,
-        required this.v,
-    });
-
-    factory Todolist.fromJson(Map<String, dynamic> json) => Todolist(
-        id: json["_id"],
-        idTodo: json["id_todo"],
-        idUser: json["id_user"],
-        name: json["name"],
-        status: json["status"],
-        priority: json["priority"],
-        start: DateTime.parse(json["start"]),
-        end: DateTime.parse(json["end"]),
-        createdAt: DateTime.parse(json["createdAt"]),
-        updatedAt: DateTime.parse(json["updatedAt"]),
-        v: json["__v"],
-    );
-
-    Map<String, dynamic> toJson() => {
-        "_id": id,
-        "id_todo": idTodo,
-        "id_user": idUser,
-        "name": name,
-        "status": status,
-        "priority": priority,
-        "start": start.toIso8601String(),
-        "end": end.toIso8601String(),
-        "createdAt": createdAt.toIso8601String(),
-        "updatedAt": updatedAt.toIso8601String(),
-        "__v": v,
+        "todolists": List<dynamic>.from(todolists.map((x) => x)),
+        "user": List<dynamic>.from(user.map((x) => x.toJson())),
     };
 }
 
@@ -147,7 +91,7 @@ class User {
     String email;
     String name;
     bool isVerified;
-    dynamic photoProfile;
+    String photoProfile;
     String status;
 
     User({
@@ -174,7 +118,7 @@ class User {
         email: json["email"],
         name: json["name"],
         isVerified: json["isVerified"],
-        photoProfile: json["photo_profile"],
+        photoProfile: json["photo_profile"] ?? "",
         status: json["status"],
     );
 

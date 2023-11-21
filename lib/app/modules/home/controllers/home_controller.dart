@@ -10,7 +10,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:todo_app/app/controller/global_controller.dart';
 import 'package:todo_app/app/data/model/todo.dart';
 import 'package:http/http.dart' as http;
-import 'package:socket_io_client/socket_io_client.dart' as Io;
 import 'package:todo_app/app/data/services/socket.dart';
 
 class HomeController extends GetxController {
