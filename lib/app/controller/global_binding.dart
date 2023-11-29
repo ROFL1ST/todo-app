@@ -4,6 +4,7 @@ import 'package:todo_app/app/modules/loginPage/controllers/loginPage_controller.
 import 'package:todo_app/app/modules/register/controllers/register_controller.dart';
 import 'package:todo_app/app/modules/splashscreen/controllers/splashscreen_controller.dart';
 import 'package:todo_app/app/modules/starter/controllers/starter_controller.dart';
+import 'package:todo_app/app/modules/todo_list/controllers/todo_list_controller.dart';
 
 class GlobalBindings extends Bindings{
     @override
@@ -13,5 +14,6 @@ class GlobalBindings extends Bindings{
       Get.lazyPut(() => RegisterController());
       Get.lazyPut(() => SplashscreenController());
       Get.lazyPut(() => StarterController());
+      Get.lazyPut(() => TodoListController());
     }
 }

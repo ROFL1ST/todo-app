@@ -3,8 +3,8 @@ import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:todo_app/config/common.dart';
 
-class StartButton extends StatelessWidget {
-  const StartButton({
+class SearchButton extends StatelessWidget {
+  const SearchButton({
     super.key,
   });
 

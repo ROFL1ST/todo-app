@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:todo_app/app/modules/loginPage/views/loginPage_view.dart';
 
@@ -44,9 +45,9 @@ class StarterController extends GetxController {
   }
 
   void goToLogin() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
+    final storage = GetStorage();
     print("Going To Login");
-    prefs.setBool('firstTime', false);
+    storage.write('firstTime', false);
     Get.offAllNamed("/register-screen");
   }
 }

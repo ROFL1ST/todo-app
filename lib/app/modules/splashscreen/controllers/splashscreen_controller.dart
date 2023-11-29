@@ -1,9 +1,11 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:todo_app/app/controller/global_controller.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
@@ -12,11 +14,13 @@ import 'package:todo_app/app/modules/home/views/home_view.dart';
 import 'package:todo_app/app/modules/loginPage/views/loginPage_view.dart';
 import 'package:todo_app/app/modules/register/views/register_view.dart';
 import 'package:todo_app/app/modules/starter/views/starter_view.dart';
+import 'package:http/http.dart' as http;
 
 class SplashscreenController extends GetxController {
   //TODO: Implement SplashscreenController
   final global = Get.put(GlobalController());
   // final profileController = Get.put(ProfileController());
+  final storage = GetStorage();
   late SharedPreferences prefs;
   final WebSocketController webSocketController =
       Get.put(WebSocketController());
@@ -49,7 +53,7 @@ class SplashscreenController extends GetxController {
 
   void checkFirstTime() async {
     prefs = await SharedPreferences.getInstance();
-    bool firstTime = prefs.getBool('firstTime') ?? true;
+    bool firstTime = await storage.read("firstTime") ?? true;
 
     Timer(Duration(seconds: 3), () {
       if (firstTime) {
@@ -61,13 +65,13 @@ class SplashscreenController extends GetxController {
   }
 
   checkToken() async {
-    final prefs = await SharedPreferences.getInstance();
-    final token = prefs.getString('token');
+    final token = await storage.read("token");
     if (global.isOnline.isTrue) {
       Timer(Duration(seconds: 3), () {
         if (token != null) {
           final isTokenExpired = JwtDecoder.isExpired(token);
           if (!isTokenExpired) {
+            authMe();
             Get.offNamed("/home");
           } else {
             Get.dialog(
@@ -122,6 +126,36 @@ class SplashscreenController extends GetxController {
           ],
         ),
       );
+    }
+  }
+
+  authMe() async {
+   
+    update();
+    try {
+      final res = await http.get(
+        Uri.parse(global.url + '/api/auth'),
+        headers: {
+          "Authorization":
+              "Bearer ${storage.read("token").toString()}",
+          'Content-type': 'application/json',
+          'Accept': 'application/json',
+        },
+      );
+      if (res.statusCode == 200) {
+        var data = jsonDecode(res.body);
+        print(data);
+        if (data['status'] == "Success") {
+          print(data);
+          storage.write("token", data["token"]);
+          // preferences.setString("token", data['data']['token']);
+          // preferences.setString("id", data['data']['id']);
+          // preferences.setString("name", data['data']['name']);
+          // preferences.setString("email", data['data']['email']);
+        }
+      }
+    } catch (e) {
+      print(e);
     }
   }
 }

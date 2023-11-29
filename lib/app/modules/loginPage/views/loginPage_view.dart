@@ -11,6 +11,7 @@ import 'package:todo_app/config/common.dart';
 class LoginPageView extends GetView<LoginPageController> {
   LoginPageView({Key? key}) : super(key: key);
   final scaffoldKey = GlobalKey<ScaffoldState>();
+  final controller = Get.put(LoginPageController());
 
   @override
   Widget build(BuildContext context) {

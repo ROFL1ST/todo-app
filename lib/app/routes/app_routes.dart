@@ -8,6 +8,7 @@ abstract class Routes {
   static const LOGINSCREEN = _Paths.LOGINSCREEN;
   static const REGISTERSCREEN = _Paths.REGISTERSCREEN;
   static const STARTER = _Paths.STARTER;
+  static const TODO_LIST = _Paths.TODO_LIST;
 }
 
 abstract class _Paths {
@@ -17,4 +18,5 @@ abstract class _Paths {
   static const LOGINSCREEN = '/login-screen';
   static const REGISTERSCREEN = '/register-screen';
   static const STARTER = '/starter';
+  static const TODO_LIST = '/todo-list';
 }

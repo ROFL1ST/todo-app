@@ -25,6 +25,9 @@ dependencies:
   shimmer: 3.0.0
   auto_size_text: 3.0.0
   step_progress_indicator: 1.0.2
+  get_storage: 2.1.1
+  connectivity_plus: 5.0.2
+  api_cache_manager: 1.0.2
   flutter: 
     sdk: flutter
 
