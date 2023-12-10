@@ -15,6 +15,7 @@ import 'package:todo_app/app/data/model/todo.dart' as Todo;
 import 'package:todo_app/app/data/model/todoAllList.dart' as TodoAllList;
 import 'package:http/http.dart' as http;
 import 'package:todo_app/app/data/services/socket.dart';
+import 'package:socket_io_client/socket_io_client.dart' as Io;
 
 class HomeController extends GetxController {
   //TODO: Implement HomeController
@@ -26,15 +27,14 @@ class HomeController extends GetxController {
   var todos = List<Todo.Datum>.empty().obs;
   var allList = List<TodoAllList.Datum>.empty().obs;
   var allListCompleted = List<TodoAllList.Datum>.empty().obs;
-
   var isLoading = false.obs;
   var isLoading2 = false.obs;
+  Io.Socket? socket;
   final storage = GetStorage();
   @override
   void onInit() {
     super.onInit();
     updateDate();
-    webSocketController.connectWebSocket();
     getTodo();
     getAllList();
   }
@@ -42,6 +42,7 @@ class HomeController extends GetxController {
   @override
   void onReady() {
     super.onReady();
+    // webSocketController.connectWebSocket();
   }
 
   @override
@@ -55,6 +56,7 @@ class HomeController extends GetxController {
     formattedDate.value = formattedString;
   }
 
+ 
   getTodo() async {
     var isCacheExist = await APICacheManager().isAPICacheKeyExist("API_TODO");
     isLoading(true);
@@ -105,7 +107,6 @@ class HomeController extends GetxController {
   }
 
   getAllList() async {
-    
     isLoading2(true);
     update();
 
@@ -163,9 +164,11 @@ class HomeController extends GetxController {
 
   getProgress() {
     if (!isLoading2.value) {
-      progress.value =
-          ((allListCompleted.length / allList.length) * 100).toInt();
-      log("${progress.value}");
+      if (allList.isNotEmpty) {
+        progress.value =
+            ((allListCompleted.length / allList.length) * 100).toInt();
+        log("${progress.value}");
+      }
     }
   }
 }

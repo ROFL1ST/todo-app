@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -20,14 +22,12 @@ class GlobalController extends GetxController {
   final isDark = false.obs;
   var isOnline = false.obs;
   final token = ''.obs;
-
   final userName = ''.obs;
 
   @override
   void onInit() {
     super.onInit();
     connection();
-    getProfile();
     if (Get.width <= 360) {
       fontHeading.value = 27.0;
       fontSize.value = 18.0;
@@ -95,7 +95,7 @@ class GlobalController extends GetxController {
   }
 
   getProfile() {
-    userName.value = Jwt.parseJwt(storage.read("token")!)["name"];
+    userName.value = Jwt.parseJwt(storage.read("token"))["name"].toString();
   }
   // initApp() async => await profile.getUserProfile(getToken().toString());
 

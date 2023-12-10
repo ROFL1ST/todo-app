@@ -56,9 +56,11 @@ class HomeView extends GetView<HomeController> {
                   SizedBox(
                     height: Get.height * 0.03,
                   ),
-                  Text(
-                    "Hi, ${global.userName}",
-                    style: TextStyle(fontSize: Get.width * 0.06),
+                  Obx(
+                    () => Text(
+                      "Hi, ${global.userName}",
+                      style: TextStyle(fontSize: Get.width * 0.06),
+                    ),
                   ),
                   SizedBox(
                     height: Get.height * 0.02,

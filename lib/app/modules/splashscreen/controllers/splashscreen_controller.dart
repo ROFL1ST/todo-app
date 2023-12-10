@@ -69,10 +69,12 @@ class SplashscreenController extends GetxController {
     if (global.isOnline.isTrue) {
       Timer(Duration(seconds: 3), () {
         if (token != null) {
+          global.getProfile();
           final isTokenExpired = JwtDecoder.isExpired(token);
           if (!isTokenExpired) {
             authMe();
-            Get.offNamed("/home");
+            webSocketController.connectWebSocket();
+            Get.offNamed("/bottom-bar");
           } else {
             Get.dialog(
               barrierDismissible: false,
@@ -130,23 +132,20 @@ class SplashscreenController extends GetxController {
   }
 
   authMe() async {
-   
     update();
     try {
       final res = await http.get(
         Uri.parse(global.url + '/api/auth'),
         headers: {
-          "Authorization":
-              "Bearer ${storage.read("token").toString()}",
+          "Authorization": "Bearer ${storage.read("token").toString()}",
           'Content-type': 'application/json',
           'Accept': 'application/json',
         },
       );
       if (res.statusCode == 200) {
         var data = jsonDecode(res.body);
-        print(data);
+
         if (data['status'] == "Success") {
-          print(data);
           storage.write("token", data["token"]);
           // preferences.setString("token", data['data']['token']);
           // preferences.setString("id", data['data']['id']);

@@ -26,7 +26,7 @@ class WebSocketController extends GetxController with WidgetsBindingObserver {
     });
     socket.onConnect((data) {
       socket.emit("online", Jwt.parseJwt(storage.read("token")!)["id"]);
-      print("connect");
+      print("connect loh");
     });
     socket.onConnectError((data) => print("error $data"));
     socket.onDisconnect((data) {

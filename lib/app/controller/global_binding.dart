@@ -1,6 +1,8 @@
 import 'package:get/get.dart';
+import 'package:todo_app/app/modules/bottomBar/controllers/bottom_bar_controller.dart';
 import 'package:todo_app/app/modules/home/controllers/home_controller.dart';
 import 'package:todo_app/app/modules/loginPage/controllers/loginPage_controller.dart';
+import 'package:todo_app/app/modules/profile/controllers/profile_controller.dart';
 import 'package:todo_app/app/modules/register/controllers/register_controller.dart';
 import 'package:todo_app/app/modules/splashscreen/controllers/splashscreen_controller.dart';
 import 'package:todo_app/app/modules/starter/controllers/starter_controller.dart';
@@ -15,5 +17,7 @@ class GlobalBindings extends Bindings{
       Get.lazyPut(() => SplashscreenController());
       Get.lazyPut(() => StarterController());
       Get.lazyPut(() => TodoListController());
+      Get.lazyPut(() => BottomBarController());
+      Get.lazyPut(() => ProfileController());
     }
 }

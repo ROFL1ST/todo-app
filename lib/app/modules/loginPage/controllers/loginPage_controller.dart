@@ -65,9 +65,7 @@ class LoginPageController extends GetxController {
           ),
         );
         Timer(Duration(milliseconds: 750), () {
-          Get.offAll(() => HomeView(),
-              duration: Duration(milliseconds: 1500),
-              transition: Transition.zoom);
+          Get.offNamed("/bottom-bar");
           Timer(Duration(seconds: 4), () {
             isLoading(false);
             update();
@@ -78,7 +76,10 @@ class LoginPageController extends GetxController {
         isLoading(false);
         Get.showSnackbar(
           GetSnackBar(
-            titleText: Text("There's been some mistake", style: TextStyle(fontWeight: FontWeight.bold),),
+            titleText: Text(
+              "There's been some mistake",
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
             messageText: Text(
               json.decode(response.body)['message'].toString(),
             ),
