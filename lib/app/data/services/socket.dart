@@ -21,7 +21,7 @@ class WebSocketController extends GetxController with WidgetsBindingObserver {
 
   void connectWebSocket() async {
     // Replace 'http://your_socket_server_url' with the actual WebSocket server URL
-    IO.Socket socket = IO.io(global.url, <String, dynamic>{
+    IO.Socket socket = IO.io("${global.url}/api/socket", <String, dynamic>{
       "transports": ["websocket"]
     });
     socket.onConnect((data) {

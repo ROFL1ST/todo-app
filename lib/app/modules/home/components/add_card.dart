@@ -3,6 +3,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:todo_app/app/helper/hero_dialogue_route.dart';
+import 'package:todo_app/app/modules/home/components/add_modal.dart';
 import 'package:todo_app/config/common.dart';
 
 class AddCard extends StatelessWidget {
@@ -17,11 +19,17 @@ class AddCard extends StatelessWidget {
         ),
         shadowColor: kBackgroundColor,
         color: kCardColor,
-        child: Container(
-          width: constraints.maxWidth / 2 - 10,
-          height: Get.height * 0.18,
-          child: Center(
-            child: IconButton(icon: Icon(Iconsax.add), onPressed: () {}),
+        child: InkWell(
+          borderRadius: BorderRadius.circular(10),
+          onTap: () {
+            Navigator.of(context).push(HeroDialogRoute(builder: (context) {
+              return AddModal();
+            }));
+          },
+          child: Container(
+            width: constraints.maxWidth / 2 - 10,
+            height: Get.height * 0.18,
+            child: Center(child: Icon(Iconsax.add)),
           ),
         ),
       );

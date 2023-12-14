@@ -66,7 +66,7 @@ class LoginPageController extends GetxController {
         );
         Timer(Duration(milliseconds: 750), () {
           Get.offNamed("/bottom-bar");
-          Timer(Duration(seconds: 4), () {
+          Timer(Duration(seconds: 2), () {
             isLoading(false);
             update();
           });

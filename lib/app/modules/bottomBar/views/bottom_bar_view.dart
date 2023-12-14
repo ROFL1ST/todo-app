@@ -76,7 +76,7 @@ class _BottomBarViewState extends State<BottomBarView> {
               ),
               GButton(
                 icon: controller.tabIndex.value == 2
-                    ? IconlyBold.notification
+                    ? IconlyBold.user_2
                     : IconlyLight.notification,
                 text: "Notification",
               ),
