@@ -2,28 +2,64 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:todo_app/app/modules/home/controllers/home_controller.dart';
 
 class EditModal extends StatefulWidget {
-  const EditModal({super.key});
-
+  const EditModal({super.key, required this.data});
+  final data;
   @override
   State<EditModal> createState() => _EditModalState();
 }
 
 class _EditModalState extends State<EditModal> {
+  TextEditingController name = TextEditingController();
+  TextEditingController description = TextEditingController();
+  final controller = Get.put(
+    HomeController(),
+  );
+  @override
+  void initState() {
+    // TODO: implement initState
+    name.text = widget.data.name;
+    description.text = widget.data.description;
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return CupertinoAlertDialog(
       title: Text('Edit Item'),
       content: Column(
         children: [
-          Text('Edit your item name:'),
-          Padding(
-            padding: EdgeInsets.only(top: 8.0),
-            child: CupertinoTextField(
-              placeholder: 'Enter item name',
-              // You can add controllers, validators, etc., based on your needs
-            ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: EdgeInsets.only(top: 8.0, bottom: 8),
+                child: CupertinoTextField(
+                  controller: name,
+                  placeholder: 'Enter item name',
+                  style: TextStyle(color: Colors.white),
+                  // You can add controllers, validators, etc., based on your needs
+                ),
+              ),
+            ],
+          ),
+          Divider(),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: EdgeInsets.only(top: 8.0),
+                child: CupertinoTextField(
+                  controller: description,
+                  placeholder: 'Enter item Description',
+                  style: TextStyle(color: Colors.white),
+                  // You can add controllers, validators, etc., based on your needs
+                ),
+              ),
+            ],
           ),
         ],
       ),
@@ -36,10 +72,25 @@ class _EditModalState extends State<EditModal> {
         ),
         CupertinoDialogAction(
           isDefaultAction: true,
-          child: Text('Save'),
+          child: Obx(
+              () => Text(controller.isLoading6.value ? "Loading" : 'Save')),
           onPressed: () {
             // Handle save action
-            Navigator.pop(context);
+            if (name.text == "" || description.text == "") {
+              Get.showSnackbar(
+                GetSnackBar(
+                  titleText: Text("Failed"),
+                  messageText: Text("Please fill your name and description"),
+                  backgroundColor: Colors.black38,
+                  duration: const Duration(milliseconds: 1300),
+                  snackPosition: SnackPosition.TOP,
+                  barBlur: 5,
+                ),
+              );
+            } else {
+              controller.updateTodo(
+                  widget.data.id, name.text, description.text, context);
+            }
           },
         ),
       ],

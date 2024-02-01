@@ -6,6 +6,8 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:get_storage/get_storage.dart';
+import 'package:jwt_decode/jwt_decode.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:simple_circular_progress_bar/simple_circular_progress_bar.dart';
 import 'package:get/get.dart';
@@ -15,6 +17,7 @@ import 'package:todo_app/app/controller/global_controller.dart';
 import 'package:todo_app/app/data/model/todo.dart';
 import 'package:todo_app/app/modules/home/components/add_card.dart';
 import 'package:todo_app/app/modules/home/components/search_button.dart';
+import 'package:todo_app/app/modules/todo_list/views/todo_list_view.dart';
 import 'package:todo_app/config/common.dart';
 
 import '../controllers/home_controller.dart';
@@ -22,8 +25,11 @@ import '../controllers/home_controller.dart';
 class HomeView extends GetView<HomeController> {
   HomeView({Key? key}) : super(key: key);
   @override
-  final controller = Get.put(HomeController(),);
+  final controller = Get.put(
+    HomeController(),
+  );
   var global = Get.put(GlobalController());
+  final storage = GetStorage();
 
   @override
   Widget build(BuildContext context) {
@@ -59,11 +65,9 @@ class HomeView extends GetView<HomeController> {
                   SizedBox(
                     height: Get.height * 0.03,
                   ),
-                  Obx(
-                    () => Text(
-                      "Hi, ${global.userName}",
-                      style: TextStyle(fontSize: Get.width * 0.06),
-                    ),
+                  Text(
+                    "Hi, ${Jwt.parseJwt(storage.read("token"))["name"].toString()}",
+                    style: TextStyle(fontSize: Get.width * 0.06),
                   ),
                   SizedBox(
                     height: Get.height * 0.02,
@@ -116,7 +120,11 @@ class HomeView extends GetView<HomeController> {
                         ? TodoLoading()
                         : controller.todos.length != 0
                             ? TodoList(context)
-                            : SizedBox(),
+                            : Container(
+                                width: Get.height / 2 - 10,
+                                height: Get.height * 0.18,
+                                child: Center(child: Icon(Iconsax.add)),
+                              ),
                   )
                 ],
               ),
@@ -224,7 +232,9 @@ class HomeView extends GetView<HomeController> {
         onLongPress: () {
           controller.modalMenu(context, data);
         },
-        onTap: () {},
+        onTap: () {
+          Get.to(() => TodoListView());
+        },
         child: Container(
           width: Get.width / 2 - 1,
           height: Get.height * 0.38,
@@ -299,7 +309,7 @@ class HomeView extends GetView<HomeController> {
                       padding: 0,
                       roundedEdges: Radius.circular(10),
                       direction: Axis.horizontal,
-                      progressDirection: ui.TextDirection.rtl,
+                      progressDirection: ui.TextDirection.ltr,
                       selectedColor: ui.Color.fromARGB(255, 126, 32, 32),
                       unselectedColor: Color(0xFFD9D9D9).withOpacity(0.4),
                     ),
@@ -328,7 +338,9 @@ class HomeView extends GetView<HomeController> {
         onLongPress: () {
           controller.modalMenu(context, data);
         },
-        onTap: () {},
+        onTap: () {
+           Get.to(() => TodoListView());
+        },
         splashColor: Colors.transparent,
         splashFactory: InkRipple.splashFactory,
         child: Container(
@@ -345,15 +357,16 @@ class HomeView extends GetView<HomeController> {
                   children: [
                     Icon(Iconsax.edit, size: Get.width * 0.06),
                     SizedBox(
-                      height: Get.height * 0.01,
+                      height: Get.height * 0.005,
                     ),
                     AutoSizeText(
                       data.name,
+                      maxLines: 1,
                       style:
                           TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
                     ),
                     SizedBox(
-                      height: Get.height * 0.01,
+                      height: Get.height * 0.005,
                     ),
                   ],
                 ),
@@ -402,7 +415,7 @@ class HomeView extends GetView<HomeController> {
                       padding: 0,
                       roundedEdges: Radius.circular(10),
                       direction: Axis.horizontal,
-                      progressDirection: ui.TextDirection.rtl,
+                      progressDirection: ui.TextDirection.ltr,
                       selectedColor: ui.Color.fromARGB(255, 126, 32, 32),
                       unselectedColor: Color(0xFFD9D9D9).withOpacity(0.4),
                     ),

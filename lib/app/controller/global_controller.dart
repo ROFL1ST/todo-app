@@ -94,11 +94,10 @@ class GlobalController extends GetxController {
       Get.changeThemeMode(ThemeMode.light);
   }
 
-  getProfile() {
-    userName.value = Jwt.parseJwt(storage.read("token"))["name"].toString();
-  }
-  // initApp() async => await profile.getUserProfile(getToken().toString());
+ 
 
+  // initApp() async => await profile.getUserProfile(getToken().toString());
+ 
   // await AwesomeNotifications().isNotificationAllowed().then(
   //   (isAllowed) {
   //     print("$isAllowed  sdfsfdsf");

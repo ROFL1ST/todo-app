@@ -76,9 +76,40 @@ class _BottomBarViewState extends State<BottomBarView> {
               ),
               GButton(
                 icon: controller.tabIndex.value == 2
-                    ? IconlyBold.user_2
+                    ? IconlyBold.notification
                     : IconlyLight.notification,
                 text: "Notification",
+                leading: controller.notifs.value.length != 0
+                    ? Stack(
+                        children: [
+                          Icon(
+                            controller.tabIndex.value == 2
+                                ? IconlyBold.notification
+                                : IconlyLight.notification,
+                            color: Colors.white,
+                          ),
+                          Positioned(
+                            top: -5,
+                            right: 0,
+                            child: Container(
+                              padding: EdgeInsets.all(3),
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: Colors.red, // or your preferred color
+                              ),
+                              child: Text(
+                                controller.notifs.value.length.toString(),
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      )
+                    : null,
               ),
               GButton(
                 icon: controller.tabIndex.value == 3

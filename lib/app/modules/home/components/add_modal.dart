@@ -14,7 +14,8 @@ class AddModal extends StatefulWidget {
 
 class _AddModalState extends State<AddModal> {
   final controller = Get.put(HomeController());
-
+  TextEditingController name = TextEditingController();
+  TextEditingController description = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Center(
@@ -46,7 +47,7 @@ class _AddModalState extends State<AddModal> {
                   ),
                   SizedBox(
                     child: TextField(
-                      controller: controller.name,
+                      controller: name,
                       cursorColor: kTextColor,
                       decoration: InputDecoration(
                         hintText: "New Activity",
@@ -78,7 +79,7 @@ class _AddModalState extends State<AddModal> {
                   ),
                   SizedBox(
                     child: TextField(
-                      controller: controller.description,
+                      controller: description,
                       cursorColor: kTextColor,
                       decoration: InputDecoration(
                         hintText: "Description",
@@ -122,10 +123,9 @@ class _AddModalState extends State<AddModal> {
                           ),
                           TextButton(
                             onPressed: () {
-                              controller.addTodo(context);
-                              if (controller.isLoading3.value == false) {
-                                // Navigator.pop(context);
-                              }
+                              print(name.text);
+                              controller.addTodo(
+                                  name.text, description.text, context);
                             },
                             child: Text(
                               controller.isLoading3.value

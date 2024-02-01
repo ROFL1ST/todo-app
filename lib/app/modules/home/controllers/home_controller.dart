@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, unnecessary_new, prefer_const_literals_to_create_immutables
+// ignore_for_file: prefer_const_constructors, unnecessary_new, prefer_const_literals_to_create_immutables, non_constant_identifier_names, library_prefixes
 
 import 'dart:convert';
 import 'dart:developer';
@@ -28,6 +28,8 @@ import 'package:todo_app/app/helper/hero_dialogue_route.dart';
 import 'package:todo_app/app/modules/home/components/delete_modal.dart';
 import 'package:todo_app/app/modules/home/components/edit_modal.dart';
 import 'package:todo_app/app/modules/home/components/friends_card.dart';
+import 'package:todo_app/app/modules/home/components/leave_card.dart';
+import 'package:todo_app/app/modules/home/components/member_card.dart';
 import 'package:todo_app/config/common.dart';
 
 class HomeController extends GetxController {
@@ -45,13 +47,13 @@ class HomeController extends GetxController {
   var isLoading2 = false.obs;
   var isLoading3 = false.obs;
   var isLoading4 = false.obs;
-  double keyboardHeight = 0.0;
+  var isLoading5 = false.obs;
+  var isLoading6 = false.obs;
+  var isLoading7 = false.obs;
+  var isLoading8 = false.obs;
 
   IO.Socket? socket;
   final storage = GetStorage();
-
-  TextEditingController name = TextEditingController();
-  TextEditingController description = TextEditingController();
 
   TextEditingController search = TextEditingController();
 
@@ -62,7 +64,10 @@ class HomeController extends GetxController {
     getTodo();
     getAllList();
     getUpdatedList();
-    getFriend();
+    getFriend("");
+    search.addListener(() {
+      getFriend(search.text);
+    });
   }
 
   @override
@@ -97,7 +102,6 @@ class HomeController extends GetxController {
       );
       if (res.statusCode == 200) {
         Todo.Todo data = Todo.todoFromJson(res.body.toString());
-        log("${data.data}");
         todos.value = data.data;
       }
     } catch (e) {
@@ -245,13 +249,12 @@ class HomeController extends GetxController {
       if (allList.isNotEmpty) {
         progress.value =
             ((allListCompleted.length / allList.length) * 100).toInt();
-        log("${progress.value}");
       }
     }
     update();
   }
 
-  addTodo(BuildContext context) async {
+  addTodo(name, desc, BuildContext context) async {
     update();
     isLoading3(true);
     try {
@@ -261,7 +264,7 @@ class HomeController extends GetxController {
         'Content-type': 'application/json',
         'Accept': 'application/json',
       };
-      if (name.text == "") {
+      if (name == "") {
         Get.showSnackbar(
           GetSnackBar(
             titleText: Text("Failed"),
@@ -277,19 +280,19 @@ class HomeController extends GetxController {
           Uri.parse(global.url + "/api/todo"),
           body: json.encode(
             {
-              "name": name.text,
-              "description": description.text,
+              "name": name,
+              "description": desc,
             },
           ),
           headers: headers,
         );
-        if (description.text == "") {
+        if (desc == "") {
           Get.showSnackbar(
             GetSnackBar(
               titleText:
                   Text("Failed", style: TextStyle(fontWeight: FontWeight.bold)),
               messageText: Text(
-                "Please insert the description of ${name.text}",
+                "Please insert the description of $name",
               ),
               backgroundColor: Colors.black38,
               duration: const Duration(milliseconds: 1300),
@@ -305,7 +308,7 @@ class HomeController extends GetxController {
                   "Success 😊",
                   style: TextStyle(fontWeight: FontWeight.bold),
                 ),
-                messageText: Text("Your ${name.text} has been added"),
+                messageText: Text("Your $name has been added"),
                 backgroundColor: Colors.black38,
                 duration: const Duration(milliseconds: 1300),
                 snackPosition: SnackPosition.TOP,
@@ -336,7 +339,112 @@ class HomeController extends GetxController {
     }
   }
 
-  getFriend() async {
+  updateTodo(id, name, desc, context) async {
+    update();
+    isLoading6(true);
+    try {
+      final token = storage.read("token").toString();
+      final headers = {
+        "Authorization": "Bearer $token",
+        'Content-type': 'application/json',
+        'Accept': 'application/json',
+      };
+      final res = await http.put(
+        Uri.parse(global.url + "/api/todo/$id"),
+        body: json.encode(
+          {
+            "name": name,
+            "description": desc,
+          },
+        ),
+        headers: headers,
+      );
+      if (res.statusCode == 200) {
+        Get.showSnackbar(
+          GetSnackBar(
+            titleText: Text(
+              "Success 😊",
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+            messageText: Text("Your $name has been updated"),
+            backgroundColor: Colors.black38,
+            duration: const Duration(milliseconds: 1300),
+            snackPosition: SnackPosition.TOP,
+            barBlur: 5,
+          ),
+        );
+        getTodo();
+        // ignore: use_build_context_synchronously
+        Navigator.pop(context);
+      }
+    } catch (e) {
+      log("$e");
+      Get.showSnackbar(
+        GetSnackBar(
+          titleText: Text("There's been some mistake"),
+          messageText: Text("Please try again later"),
+          backgroundColor: Colors.black38,
+          duration: const Duration(milliseconds: 1300),
+          snackPosition: SnackPosition.TOP,
+          barBlur: 5,
+        ),
+      );
+    } finally {
+      update();
+      isLoading6(false);
+    }
+  }
+
+  deleteTodo(id, name, context) async {
+    update();
+    isLoading7(true);
+    try {
+      final token = storage.read("token").toString();
+      final headers = {
+        "Authorization": "Bearer $token",
+        'Content-type': 'application/json',
+        'Accept': 'application/json',
+      };
+      final res = await http.delete(
+        Uri.parse("${global.url}/api/todo/$id"),
+        headers: headers,
+      );
+      if (res.statusCode == 200) {
+        Get.showSnackbar(
+          GetSnackBar(
+            titleText: Text(
+              "Success 😊",
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+            messageText: Text("Your $name has been deleted"),
+            backgroundColor: Colors.black38,
+            duration: const Duration(milliseconds: 1300),
+            snackPosition: SnackPosition.TOP,
+            barBlur: 5,
+          ),
+        );
+        getTodo();
+        Navigator.pop(context);
+      }
+    } catch (e) {
+      log("$e");
+      Get.showSnackbar(
+        GetSnackBar(
+          titleText: Text("There's been some mistake"),
+          messageText: Text("Please try again later"),
+          backgroundColor: Colors.black38,
+          duration: const Duration(milliseconds: 1300),
+          snackPosition: SnackPosition.TOP,
+          barBlur: 5,
+        ),
+      );
+    } finally {
+      update();
+      isLoading7(false);
+    }
+  }
+
+  getFriend(val) async {
     update();
     isLoading4(true);
     try {
@@ -347,7 +455,7 @@ class HomeController extends GetxController {
         'Accept': 'application/json',
       };
       final result = await http.get(
-        Uri.parse("${global.url}/api/friends"),
+        Uri.parse("${global.url}/api/friends?key=$val"),
         headers: headers,
       );
       if (result.statusCode == 200) {
@@ -371,12 +479,134 @@ class HomeController extends GetxController {
     }
   }
 
+  inviteUser(idUser, id, name, context) async {
+    update();
+    isLoading5(true);
+    try {
+      final token = storage.read("token").toString();
+      final headers = {
+        "Authorization": "Bearer $token",
+        'Content-type': 'application/json',
+        'Accept': 'application/json',
+      };
+      final res = await http.post(
+        Uri.parse("${global.url}/api/todo/add/$id"),
+        body: json.encode(
+          {
+            "invitedUser": idUser,
+          },
+        ),
+        headers: headers,
+      );
+      if (res.statusCode == 200) {
+        Get.showSnackbar(
+          GetSnackBar(
+            titleText: Text(
+              "Success 😊",
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+            messageText: Text("$name has been invited to your todo"),
+            backgroundColor: Colors.black38,
+            duration: const Duration(milliseconds: 1300),
+            snackPosition: SnackPosition.TOP,
+            barBlur: 5,
+          ),
+        );
+        getTodo();
+        Navigator.pop(context);
+      } else {
+        Get.showSnackbar(
+          GetSnackBar(
+            titleText: Text(
+              "Failed",
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+            messageText: Text("$name has already been invited"),
+            backgroundColor: Colors.black38,
+            duration: const Duration(milliseconds: 1300),
+            snackPosition: SnackPosition.TOP,
+            barBlur: 5,
+          ),
+        );
+      }
+    } catch (e) {
+      log("$e");
+      Get.showSnackbar(
+        GetSnackBar(
+          titleText: Text("There's been some mistake"),
+          messageText: Text("Please try again later"),
+          backgroundColor: Colors.black38,
+          duration: const Duration(milliseconds: 1300),
+          snackPosition: SnackPosition.TOP,
+          barBlur: 5,
+        ),
+      );
+    } finally {
+      update();
+      isLoading5(false);
+    }
+  }
+
+  kickUser(idUser, id, name, context) async {
+    update();
+    isLoading8(true);
+    try {
+      final token = storage.read("token").toString();
+      final headers = {
+        "Authorization": "Bearer $token",
+        'Content-type': 'application/json',
+        'Accept': 'application/json',
+      };
+      final res = await http.delete(
+        Uri.parse("${global.url}/api/todo/kick/$id"),
+        body: json.encode(
+          {
+            "kick": idUser,
+          },
+        ),
+        headers: headers,
+      );
+      if (res.statusCode == 200) {
+        Get.showSnackbar(
+          GetSnackBar(
+            titleText: Text(
+              "Success 😊",
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+            messageText: Text("$name has been kicked from your todo"),
+            backgroundColor: Colors.black38,
+            duration: const Duration(milliseconds: 1300),
+            snackPosition: SnackPosition.TOP,
+            barBlur: 5,
+          ),
+        );
+        getTodo();
+        Navigator.pop(context);
+      }
+    } catch (e) {
+      log("$e");
+      Get.showSnackbar(
+        GetSnackBar(
+          titleText: Text("There's been some mistake"),
+          messageText: Text("Please try again later"),
+          backgroundColor: Colors.black38,
+          duration: const Duration(milliseconds: 1300),
+          snackPosition: SnackPosition.TOP,
+          barBlur: 5,
+        ),
+      );
+    } finally {
+      isLoading8(false);
+      update();
+    }
+  }
+
+// Modal
   modalMenu(BuildContext outerContext, data) {
     var user = data.user.firstWhere(
       (user) =>
           user.idUser == Jwt.parseJwt(storage.read("token"))["id"].toString(),
     );
-    log("${user.role}");
     BuildContext scaffoldContext;
     showModalBottomSheet(
       backgroundColor: kBackgroundColor,
@@ -416,11 +646,9 @@ class HomeController extends GetxController {
                         ),
                         leading: Icon(
                           IconlyBold.edit,
-                          color: kEdit,
                         ),
                         title: Text(
                           "Edit",
-                          style: TextStyle(color: kEdit),
                         ),
                         onTap: () {
                           // Handle edit action
@@ -428,8 +656,29 @@ class HomeController extends GetxController {
 
                           Navigator.of(context)
                               .push(HeroDialogRoute(builder: (context) {
-                            return EditModal();
+                            return EditModal(data: data);
                           }));
+                        },
+                      )
+                    : SizedBox(),
+                (user.role != "member")
+                    ? ListTile(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        leading: Icon(
+                          IconlyBold.add_user,
+                          color: kInvite,
+                        ),
+                        title: Text(
+                          "Invite",
+                          style: TextStyle(color: kInvite),
+                        ),
+                        onTap: () {
+                          // Handle invite action
+                          Navigator.pop(scaffoldContext);
+
+                          inviteModal(context, data); // Close the bottom sheet
                         },
                       )
                     : SizedBox(),
@@ -452,31 +701,12 @@ class HomeController extends GetxController {
 
                           Navigator.of(context)
                               .push(HeroDialogRoute(builder: (context) {
-                            return DeleteModal();
+                            return DeleteModal(
+                              data: data,
+                            );
                           }));
 
                           // Close the bottom sheet using the stored scaffold's context
-                        },
-                      )
-                    : SizedBox(),
-                (user.role != "member")
-                    ? ListTile(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        leading: Icon(
-                          IconlyBold.add_user,
-                          color: kInvite,
-                        ),
-                        title: Text(
-                          "Invite",
-                          style: TextStyle(color: kInvite),
-                        ),
-                        onTap: () {
-                          // Handle invite action
-                          Navigator.pop(scaffoldContext);
-
-                          inviteModal(context, data.user); // Close the bottom sheet
                         },
                       )
                     : SizedBox(),
@@ -491,11 +721,13 @@ class HomeController extends GetxController {
                         ),
                         title: Text(
                           "Kick",
-                          style: TextStyle(color: kKick),
+                          style: TextStyle(color: kDelete),
                         ),
                         onTap: () {
                           // Handle kick action
-                          Navigator.pop(context); // Close the bottom sheet
+                          Navigator.pop(scaffoldContext);
+                          kickModal(outerContext, data);
+                          // Close the bottom sheet
                         },
                       )
                     : ListTile(
@@ -508,11 +740,19 @@ class HomeController extends GetxController {
                         ),
                         title: Text(
                           "Leave",
-                          style: TextStyle(color: kKick),
+                          style: TextStyle(color: kDelete),
                         ),
                         onTap: () {
                           // Handle kick action
-                          Navigator.pop(context); // Close the bottom sheet
+                          Navigator.pop(scaffoldContext);
+
+                          Navigator.of(context)
+                              .push(HeroDialogRoute(builder: (context) {
+                            return LeaveModal(
+                              data: data,
+                            );
+                          }));
+                          // Close the bottom sheet
                         },
                       ),
               ],
@@ -524,9 +764,11 @@ class HomeController extends GetxController {
   }
 
   inviteModal(BuildContext outerContext, data) {
-    BuildContext scaffoldContext;
-    double keyboardHeight = MediaQuery.of(outerContext).viewInsets.bottom;
-    
+    List<Friends.Datum> filteredUsers = friendList
+        .where((u) => !data.user.any((friend) => friend.idUser == u.idUser))
+        .toList();
+    RxList<Friends.Datum> filteredDatumUsers =
+        RxList<Friends.Datum>.from(filteredUsers);
     showModalBottomSheet(
       backgroundColor: kBackgroundColor,
       clipBehavior: Clip.antiAlias,
@@ -595,24 +837,154 @@ class HomeController extends GetxController {
                   ),
                 ),
                 SizedBox(height: Get.height * 0.01),
-                ListView.builder(
-                  scrollDirection: Axis.vertical,
-                  shrinkWrap: true,
-                  itemCount: friendList.length,
-                  itemBuilder: (context, index) {
-                    return FriendCard(friendList: friendList, index: index);
-                  },
+                Obx(() {
+                  return (filteredDatumUsers.isNotEmpty)
+                      ? ListView.builder(
+                          scrollDirection: Axis.vertical,
+                          shrinkWrap: true,
+                          itemCount: friendList.length,
+                          itemBuilder: (context, index) {
+                            return FriendCard(
+                                friendList: filteredDatumUsers,
+                                index: index,
+                                data: data);
+                          },
+                        )
+                      : Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Center(
+                              child: Text("No Results Found"),
+                            ),
+                          ],
+                        );
+                })
+              ],
+            ),
+          ),
+        );
+      },
+    ).whenComplete(() {
+      // Reset the controller and dispose of it when the bottom sheet is closed
+      search.text = "";
+    });
+  }
+
+  kickModal(BuildContext outerContext, data) {
+    TextEditingController searchKick = TextEditingController();
+
+    List<Todo.User> memberData = data.user
+        .where((u) =>
+            u.idUser != Jwt.parseJwt(storage.read("token"))["id"].toString())
+        .toList();
+    RxList<Todo.User> memberList = RxList<Todo.User>.from(memberData);
+
+    showModalBottomSheet(
+      backgroundColor: kBackgroundColor,
+      clipBehavior: Clip.antiAlias,
+      isScrollControlled: true,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(MediaQuery.of(outerContext).size.width / 20),
+          topRight:
+              Radius.circular(MediaQuery.of(outerContext).size.width / 20),
+        ),
+      ),
+      context: Get.context!,
+      builder: (context) {
+        return SingleChildScrollView(
+          child: Container(
+            height: Get.height * 0.8,
+            padding: EdgeInsets.only(
+              left: Get.width / 20,
+              right: Get.width / 20,
+              top: Get.width / 20,
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                SizedBox(
+                  height: Get.height * 0.01,
+                ),
+                Container(
+                  height: 4, // Adjust the height of the line as needed
+                  width: Get.width / 5,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                    color: Colors.grey,
+                  ),
+                  // Change the color of the line
+                ),
+                SizedBox(
+                  height: Get.height * 0.01,
+                ),
+                Container(
+                  margin: EdgeInsets.symmetric(vertical: 10),
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 10,
+                    vertical: 3,
+                  ),
+                  width: Get.width,
+                  decoration: BoxDecoration(
+                    color: kBgForm,
+                    borderRadius: BorderRadius.circular(9),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 5.0, horizontal: 8),
+                    child: TextField(
+                      controller: searchKick,
+                      onChanged: (_) {
+                        // Update memberList based on searchKick.text
+                        memberList.assignAll(memberData.where((u) => u.name
+                            .toLowerCase()
+                            .contains(searchKick.text.toLowerCase())));
+                      },
+                      decoration: InputDecoration(
+                        icon: Icon(
+                          Iconsax.search_normal,
+                          color: Colors.white,
+                        ),
+                        hintText: "Search your friend",
+                        border: InputBorder.none,
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(height: Get.height * 0.01),
+                Obx(
+                  () => (memberList.isNotEmpty)
+                      ? ListView.builder(
+                          scrollDirection: Axis.vertical,
+                          shrinkWrap: true,
+                          itemCount: memberList.length,
+                          itemBuilder: (context, index) {
+                            return MemberCard(
+                                friendList: memberList,
+                                index: index,
+                                data: data);
+                          },
+                        )
+                      : Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Center(
+                              child: Text("No Member's Found"),
+                            ),
+                          ],
+                        ),
                 )
               ],
             ),
           ),
         );
       },
-    );
-  }
-
-  void updateKeyboardHeight(double height) {
-    keyboardHeight = height;
-    update(); // This will trigger a rebuild of the UI
+    ).whenComplete(() {
+      // Reset the controller and dispose of it when the bottom sheet is closed
+      search.text = "";
+    });
   }
 }

@@ -1,5 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'dart:developer';
+
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -7,32 +9,35 @@ import 'package:flutter_initicon/flutter_initicon.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:todo_app/app/data/model/friends.dart' as Friends;
+import 'package:todo_app/app/data/model/todo.dart' as Todo;
+
 import 'package:todo_app/app/modules/home/controllers/home_controller.dart';
 import 'package:todo_app/config/common.dart';
 
-class FriendCard extends StatefulWidget {
-  const FriendCard({
+class MemberCard extends StatefulWidget {
+  const MemberCard({
     super.key,
     required this.friendList,
     required this.index,
     required this.data,
   });
 
-  final RxList<Friends.Datum> friendList;
+  final RxList<Todo.User> friendList;
   final int index;
   final data;
 
   @override
-  State<FriendCard> createState() => _FriendCardState();
+  State<MemberCard> createState() => _MemberCardState();
 }
 
-class _FriendCardState extends State<FriendCard> {
+class _MemberCardState extends State<MemberCard> {
   final controller = Get.put(
     HomeController(),
   );
 
   @override
   Widget build(BuildContext context) {
+    log("${widget.friendList[widget.index].idUser}");
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
@@ -85,18 +90,18 @@ class _FriendCardState extends State<FriendCard> {
           // Card left
           Container(
             decoration: BoxDecoration(
-                color: kColor1, borderRadius: BorderRadius.circular(10)),
+                color: kDelete, borderRadius: BorderRadius.circular(10)),
             child: InkWell(
                 borderRadius: BorderRadius.circular(10),
                 onTap: () {
-                  controller.inviteUser(widget.friendList[widget.index].idUser,
+                  controller.kickUser(widget.friendList[widget.index].idUser,
                       widget.data.id,  widget.friendList[widget.index].username, context);
                 },
                 child: Padding(
                   padding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-                  child: Obx(() => controller.isLoading5.value
+                  child: Obx(() => controller.isLoading8.value
                       ? Text("Loading")
-                      : Text("Invite")),
+                      : Text("Kick")),
                 )),
           ),
         ],

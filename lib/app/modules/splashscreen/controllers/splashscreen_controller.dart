@@ -69,7 +69,7 @@ class SplashscreenController extends GetxController {
     if (global.isOnline.isTrue) {
       Timer(Duration(seconds: 3), () {
         if (token != null) {
-          global.getProfile();
+        
           final isTokenExpired = JwtDecoder.isExpired(token);
           if (!isTokenExpired) {
             authMe();
